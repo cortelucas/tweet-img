@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Tweet → Imagem</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <aside class="panel">
+    <h2>Dados</h2>
+    <label>Nome <input id="name" value="Lucas S. Corte"></label>
+    <label>@usuário <input id="handle" value="olucascorte"></label>
+    <label>Avatar <input id="avatar" type="file" accept="image/*"></label>
+    <label>Texto <textarea id="text" rows="8"></textarea></label>
+    <label>Foto do post <input id="photo" type="file" accept="image/*"></label>
+    <label>Formato da foto
+      <select id="ratio">
+        <option value="1 / 1">Quadrada</option>
+        <option value="4 / 3">4:3</option>
+        <option value="16 / 9">16:9</option>
+      </select>
+    </label>
+    <label>Data <input id="datetime"></label>
+    <label>Marca d'água <input id="watermark" value="@olucascorte"></label>
+    <button id="download">Baixar PNG 1080×1080</button>
+  </aside>
+
+  <main class="preview-wrap">
+    <div id="stage">
+      <article class="tweet">
+        <header>
+          <img id="p-avatar" class="avatar" alt="">
+          <div class="who">
+            <strong id="p-name"></strong>
+            <span id="p-handle"></span>
+          </div>
+          <svg class="x-logo" viewBox="0 0 24 24"><path d="M18.9 2H22l-7.2 8.2L23 22h-6.6l-5.2-6.8L5.2 22H2l7.7-8.8L1.6 2h6.8l4.7 6.2L18.9 2zm-1.2 18h1.8L7.4 3.9H5.5L17.7 20z"/></svg>
+        </header>
+        <p id="p-text"></p>
+        <img id="p-photo" class="photo" alt="">
+        <footer id="p-datetime"></footer>
+      </article>
+      <span id="p-watermark" class="watermark"></span>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
