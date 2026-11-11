@@ -1,0 +1,95 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Segoe UI", Roboto, -apple-system, Helvetica, Arial, sans-serif;
+  background: #1a1a1a;
+  color: #0f1419;
+}
+
+/* ---------- Painel ---------- */
+.panel {
+  width: 320px;
+  padding: 20px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  height: 100vh;
+  flex-shrink: 0;
+}
+.panel label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600; }
+.panel input, .panel textarea, .panel select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 400;
+}
+.panel button {
+  padding: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #0f1419;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.preview-wrap { flex: 1; overflow: auto; padding: 20px; }
+
+/* ---------- Stage 1080x1080 ---------- */
+#stage {
+  position: relative;
+  width: 1080px;
+  height: 1080px;
+  background: #d4d4d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ---------- Card do tweet ---------- */
+.tweet {
+  width: 1000px;
+  padding: 44px;
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, .18);
+  transform-origin: center center;
+}
+
+.tweet header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
+.avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; background: #ccc; }
+.who { display: flex; flex-direction: column; flex: 1; }
+.who strong { font-size: 34px; font-weight: 700; }
+.who span { font-size: 30px; color: #536471; }
+.who span::before { content: "@"; }
+.x-logo { width: 48px; height: 48px; fill: #0f1419; }
+
+#p-text { font-size: 40px; line-height: 1.3; white-space: pre-wrap; margin-bottom: 28px; }
+
+.photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin: 0;
+  border-radius: 28px;
+  border: 1px solid #cfd9de;
+}
+.photo:not([src]), .photo[src=""] { display: none; }
+
+.tweet footer { margin-top: 24px; font-size: 30px; color: #536471; }
+
+.watermark {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #444;
+}
