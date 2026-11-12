@@ -64,6 +64,8 @@ body {
 }
 .panel .upload:hover { border-color: #0f1419; background: #eef2f4; color: #0f1419; }
 .panel .upload.has-file { border-style: solid; border-color: #0f1419; color: #0f1419; }
+.panel .upload.dragover { border-color: #1d9bf0; background: #e8f5fe; color: #1d9bf0; }
+.upload > * { pointer-events: none; }
 .upload .thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
 .upload .thumb[hidden] { display: none; }
 .upload-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

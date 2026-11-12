@@ -87,15 +87,16 @@ const applyImage = (inputId, targetId, dataUrl, name) => {
 };
 
 const bindImage = (inputId, targetId) => {
+  const label = $(inputId).closest(".upload");
+
   // restaura a imagem salva
   try {
     const saved = JSON.parse(localStorage.getItem(IMG_KEY(inputId)));
     if (saved) applyImage(inputId, targetId, saved.data, saved.name);
   } catch {}
 
-  $(inputId).addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleFile = (file) => {
+    if (!file || !file.type.startsWith("image/")) return;
     const reader = new FileReader();
     reader.onload = async () => {
       applyImage(inputId, targetId, reader.result, file.name);
@@ -108,7 +109,27 @@ const bindImage = (inputId, targetId) => {
       }
     };
     reader.readAsDataURL(file);
-  });
+  };
+
+  // clicar
+  $(inputId).addEventListener("change", (e) => handleFile(e.target.files[0]));
+
+  // arrastar e soltar
+  ["dragenter", "dragover"].forEach((ev) =>
+    label.addEventListener(ev, (e) => {
+      e.preventDefault();
+      label.classList.add("dragover");
+    })
+  );
+  ["dragleave", "drop"].forEach((ev) =>
+    label.addEventListener(ev, (e) => {
+      e.preventDefault();
+      label.classList.remove("dragover");
+    })
+  );
+  label.addEventListener("drop", (e) => handleFile(e.dataTransfer.files[0]));
+
+  return handleFile;
 };
 
 /* ---------- Data de hoje (editável, não é salva) ---------- */
@@ -123,7 +144,18 @@ bind("datetime", "p-datetime");
 bind("watermark", "p-watermark");
 
 bindImage("avatar", "p-avatar");
-bindImage("photo", "p-photo");
+const handlePhoto = bindImage("photo", "p-photo");
+
+// colar imagem (Ctrl+V) vai para a foto do post
+document.addEventListener("paste", (e) => {
+  const item = [...(e.clipboardData?.items || [])].find((i) => i.type.startsWith("image/"));
+  if (!item) return;
+  e.preventDefault();
+  handlePhoto(item.getAsFile());
+});
+
+// evita que o navegador abra a imagem se soltar fora da área
+["dragover", "drop"].forEach((ev) => window.addEventListener(ev, (e) => e.preventDefault()));
 
 /* ---------- Tema ---------- */
 $("theme").addEventListener("change", (e) => {
