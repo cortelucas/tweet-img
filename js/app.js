@@ -25,19 +25,25 @@ const bind = (inputId, targetId) => {
 
 /* ---------- Imagens ---------- */
 const bindImage = (inputId, targetId) => {
-  $(inputId).addEventListener("change", (e) => {
+  const input = $(inputId);
+  const label = input.closest(".upload");
+  const thumb = label.querySelector(".thumb");
+  const text = label.querySelector(".upload-text");
+
+  input.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => ($(targetId).src = reader.result);
+    reader.onload = () => {
+      $(targetId).src = reader.result;
+      thumb.src = reader.result;
+      thumb.hidden = false;
+      text.textContent = file.name;
+      label.classList.add("has-file");
+    };
     reader.readAsDataURL(file);
   });
 };
-
-/* ---------- Data de hoje (editável) ---------- */
-$("datetime").value = new Date()
-  .toLocaleDateString("pt-BR", { day: "numeric", month: "short", year: "numeric" })
-  .replace(".", ""); // ex.: 11 de nov de 2026
 
 bind("name", "p-name");
 bind("handle", "p-handle");
@@ -59,6 +65,20 @@ $("p-avatar").addEventListener("load", fitCard);
 document.fonts.ready.then(fitCard);
 fitCard();
 
+/* ---------- Preview: ajusta o stage à tela e centraliza ---------- */
+const holder = $("stage-holder");
+const wrap = document.querySelector(".preview-wrap");
+
+const fitStage = () => {
+  const availW = wrap.clientWidth - 40;
+  const availH = window.innerWidth > 800 ? wrap.clientHeight - 40 : Infinity;
+  const s = Math.min(1, availW / 1080, availH / 1080);
+  holder.style.width = holder.style.height = `${1080 * s}px`;
+  $("stage").style.transform = `scale(${s})`;
+};
+window.addEventListener("resize", fitStage);
+fitStage();
+
 /* ---------- Download ---------- */
 $("download").addEventListener("click", async () => {
   try {
@@ -67,6 +87,7 @@ $("download").addEventListener("click", async () => {
       height: 1080,
       pixelRatio: 1,
       cacheBust: true,
+      style: { transform: "none" }, // exporta sempre em 1080x1080 reais
     });
     const a = document.createElement("a");
     a.download = "tweet-1080.png";
