@@ -150,6 +150,7 @@ body {
 
 /* ---------- Card do tweet ---------- */
 .tweet {
+	font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 	width: 1000px;
 	padding: 44px;
 	background: #fff;
@@ -227,4 +228,12 @@ body {
 	font-size: 32px;
 	font-weight: 700;
 	color: #444;
+}
+
+/* ---------- Emojis (Twemoji, mesmo set do X) ---------- */
+img.emoji {
+	height: 1.1em;
+	width: 1.1em;
+	margin: 0 0.05em 0 0.1em;
+	vertical-align: -0.15em;
 }

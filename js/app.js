@@ -17,6 +17,7 @@ const bind = (inputId, targetId) => {
   const target = $(targetId);
   const update = () => {
     target.textContent = input.value;
+    if (window.twemoji) twemoji.parse(target, { folder: "svg", ext: ".svg" });
     fitCard();
   };
   input.addEventListener("input", update);
