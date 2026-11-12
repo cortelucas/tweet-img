@@ -14,7 +14,8 @@ const fitCard = () => {
 /* ---------- Persistência (localStorage) ---------- */
 const STORE_KEY = "tweet-img:v1";
 const IMG_KEY = (id) => `${STORE_KEY}:img:${id}`;
-const FIELDS = ["name", "handle", "text", "watermark", "theme", "ratio"];
+const STATS = ["replies", "reposts", "likes", "views"];
+const FIELDS = ["name", "handle", "text", "watermark", "theme", "ratio", ...STATS];
 
 const state = (() => {
   try {
@@ -156,6 +157,21 @@ document.addEventListener("paste", (e) => {
 
 // evita que o navegador abra a imagem se soltar fora da área
 ["dragover", "drop"].forEach((ev) => window.addEventListener(ev, (e) => e.preventDefault()));
+
+/* ---------- Interações (some se estiver vazio) ---------- */
+const updateStats = () => {
+  let any = false;
+  STATS.forEach((id) => {
+    const v = $(id).value.trim();
+    $(`p-${id}`).textContent = v;
+    $(`s-${id}`).hidden = !v;
+    if (v) any = true;
+  });
+  $("p-stats").hidden = !any;
+  fitCard();
+};
+STATS.forEach((id) => $(id).addEventListener("input", updateStats));
+updateStats();
 
 /* ---------- Tema ---------- */
 $("theme").addEventListener("change", (e) => {
