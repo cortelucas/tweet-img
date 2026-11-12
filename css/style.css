@@ -133,13 +133,13 @@ body {
 
 .tweet header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
 .avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; background: #ccc; }
-.who { display: flex; flex-direction: column; flex: 1; }
+.who { display: flex; flex-direction: column; flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .who strong { font-size: 34px; font-weight: 700; }
 .who span { font-size: 30px; color: var(--muted); }
 .who span::before { content: "@"; }
 .x-logo { width: 48px; height: 48px; fill: var(--text); }
 
-#p-text { font-size: 40px; line-height: 1.3; white-space: pre-wrap; margin-bottom: 28px; }
+#p-text { font-size: 40px; line-height: 1.3; white-space: pre-wrap; overflow-wrap: anywhere; margin-bottom: 28px; }
 
 .photo {
   display: block;
