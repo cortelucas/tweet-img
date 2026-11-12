@@ -11,6 +11,41 @@ const fitCard = () => {
   tweet.style.transform = `scale(${s})`;
 };
 
+/* ---------- Persistência (localStorage) ---------- */
+const STORE_KEY = "tweet-img:v1";
+const IMG_KEY = (id) => `${STORE_KEY}:img:${id}`;
+const FIELDS = ["name", "handle", "text", "watermark", "theme", "ratio"];
+
+const state = (() => {
+  try {
+    return JSON.parse(localStorage.getItem(STORE_KEY)) || {};
+  } catch {
+    return {};
+  }
+})();
+
+const save = () => {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  } catch (err) {
+    console.warn("Não foi possível salvar:", err);
+  }
+};
+
+// restaura os campos ANTES do primeiro bind()
+FIELDS.forEach((id) => {
+  if (state[id] !== undefined) $(id).value = state[id];
+});
+
+FIELDS.forEach((id) => {
+  const el = $(id);
+  const evt = el.tagName === "SELECT" ? "change" : "input";
+  el.addEventListener(evt, () => {
+    state[id] = el.value;
+    save();
+  });
+});
+
 /* ---------- Texto ---------- */
 const bind = (inputId, targetId) => {
   const input = $(inputId);
@@ -25,26 +60,61 @@ const bind = (inputId, targetId) => {
 };
 
 /* ---------- Imagens ---------- */
-const bindImage = (inputId, targetId) => {
-  const input = $(inputId);
-  const label = input.closest(".upload");
-  const thumb = label.querySelector(".thumb");
-  const text = label.querySelector(".upload-text");
+// reduz a imagem (máx. 1600px) para caber no localStorage
+const shrink = (dataUrl, max = 1600) =>
+  new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * k);
+      c.height = Math.round(img.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      resolve(c.toDataURL("image/webp", 0.9));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
 
-  input.addEventListener("change", (e) => {
+const applyImage = (inputId, targetId, dataUrl, name) => {
+  const label = $(inputId).closest(".upload");
+  const thumb = label.querySelector(".thumb");
+  $(targetId).src = dataUrl;
+  thumb.src = dataUrl;
+  thumb.hidden = false;
+  label.querySelector(".upload-text").textContent = name;
+  label.classList.add("has-file");
+};
+
+const bindImage = (inputId, targetId) => {
+  // restaura a imagem salva
+  try {
+    const saved = JSON.parse(localStorage.getItem(IMG_KEY(inputId)));
+    if (saved) applyImage(inputId, targetId, saved.data, saved.name);
+  } catch {}
+
+  $(inputId).addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      $(targetId).src = reader.result;
-      thumb.src = reader.result;
-      thumb.hidden = false;
-      text.textContent = file.name;
-      label.classList.add("has-file");
+    reader.onload = async () => {
+      applyImage(inputId, targetId, reader.result, file.name);
+      const small = await shrink(reader.result);
+      try {
+        localStorage.removeItem(IMG_KEY(inputId));
+        localStorage.setItem(IMG_KEY(inputId), JSON.stringify({ data: small, name: file.name }));
+      } catch {
+        console.warn("Imagem grande demais para salvar; não será restaurada.");
+      }
     };
     reader.readAsDataURL(file);
   });
 };
+
+/* ---------- Data de hoje (editável, não é salva) ---------- */
+$("datetime").value = new Date()
+  .toLocaleDateString("pt-BR", { day: "numeric", month: "short", year: "numeric" })
+  .replace(".", ""); // ex.: 11 de nov de 2026
 
 bind("name", "p-name");
 bind("handle", "p-handle");
@@ -59,12 +129,14 @@ bindImage("photo", "p-photo");
 $("theme").addEventListener("change", (e) => {
   $("stage").dataset.theme = e.target.value;
 });
+$("stage").dataset.theme = $("theme").value;
 
 /* ---------- Formato da foto ---------- */
 $("ratio").addEventListener("change", (e) => {
   photo.style.aspectRatio = e.target.value;
   fitCard();
 });
+photo.style.aspectRatio = $("ratio").value;
 
 photo.addEventListener("load", fitCard);
 $("p-avatar").addEventListener("load", fitCard);
@@ -103,4 +175,12 @@ $("download").addEventListener("click", async () => {
     console.error("Erro ao exportar:", err);
     alert("Falha ao gerar a imagem. Veja o console.");
   }
+});
+
+/* ---------- Limpar dados salvos ---------- */
+$("reset").addEventListener("click", () => {
+  Object.keys(localStorage)
+    .filter((k) => k.startsWith(STORE_KEY))
+    .forEach((k) => localStorage.removeItem(k));
+  location.reload();
 });
