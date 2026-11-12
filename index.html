@@ -10,9 +10,23 @@
     <h2>Dados</h2>
     <label>Nome <input id="name" value="Lucas S. Corte"></label>
     <label>@usuário <input id="handle" value="olucascorte"></label>
-    <label>Avatar <input id="avatar" type="file" accept="image/*"></label>
+    <div class="field">
+      <span class="field-title">Avatar</span>
+      <label class="upload">
+        <input id="avatar" type="file" accept="image/*" hidden>
+        <img class="thumb" alt="" hidden>
+        <span class="upload-text">Escolher imagem</span>
+      </label>
+    </div>
     <label>Texto <textarea id="text" rows="8"></textarea></label>
-    <label>Foto do post <input id="photo" type="file" accept="image/*"></label>
+    <div class="field">
+      <span class="field-title">Foto do post</span>
+      <label class="upload">
+        <input id="photo" type="file" accept="image/*" hidden>
+        <img class="thumb" alt="" hidden>
+        <span class="upload-text">Escolher imagem</span>
+      </label>
+    </div>
     <label>Formato da foto
       <select id="ratio">
         <option value="1 / 1">Quadrada</option>
@@ -26,6 +40,7 @@
   </aside>
 
   <main class="preview-wrap">
+    <div id="stage-holder">
     <div id="stage">
       <article class="tweet">
         <header>
@@ -41,6 +56,7 @@
         <footer id="p-datetime"></footer>
       </article>
       <span id="p-watermark" class="watermark"></span>
+    </div>
     </div>
   </main>
 
