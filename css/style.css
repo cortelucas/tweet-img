@@ -133,6 +133,36 @@ body {
 	}
 }
 
+/* ---------- Temas ---------- */
+#stage,
+#stage[data-theme="light"] {
+	--stage-bg: #d4d4d4;
+	--card-bg: #fff;
+	--card-border: transparent;
+	--text: #0f1419;
+	--muted: #536471;
+	--border: #cfd9de;
+	--watermark: #444;
+}
+#stage[data-theme="dim"] {
+	--stage-bg: #0b1118;
+	--card-bg: #15202b;
+	--card-border: #38444d;
+	--text: #f7f9f9;
+	--muted: #8b98a5;
+	--border: #38444d;
+	--watermark: #aab8c2;
+}
+#stage[data-theme="dark"] {
+	--stage-bg: #1c1c1c;
+	--card-bg: #000;
+	--card-border: #2f3336;
+	--text: #e7e9ea;
+	--muted: #71767b;
+	--border: #2f3336;
+	--watermark: #aaa;
+}
+
 /* ---------- Stage 1080x1080 ---------- */
 #stage {
 	position: absolute;
@@ -141,7 +171,7 @@ body {
 	transform-origin: top left;
 	width: 1080px;
 	height: 1080px;
-	background: #d4d4d4;
+	background: var(--stage-bg);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -153,7 +183,9 @@ body {
 	font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 	width: 1000px;
 	padding: 44px;
-	background: #fff;
+	background: var(--card-bg);
+	color: var(--text);
+	border: 1px solid var(--card-border);
 	border-radius: 32px;
 	box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
 	transform-origin: center center;
@@ -183,7 +215,7 @@ body {
 }
 .who span {
 	font-size: 30px;
-	color: #536471;
+	color: var(--muted);
 }
 .who span::before {
 	content: "@";
@@ -191,7 +223,7 @@ body {
 .x-logo {
 	width: 48px;
 	height: 48px;
-	fill: #0f1419;
+	fill: var(--text);
 }
 
 #p-text {
@@ -208,7 +240,7 @@ body {
 	object-fit: cover;
 	margin: 0;
 	border-radius: 28px;
-	border: 1px solid #cfd9de;
+	border: 1px solid var(--border);
 }
 .photo:not([src]),
 .photo[src=""] {
@@ -218,7 +250,7 @@ body {
 .tweet footer {
 	margin-top: 24px;
 	font-size: 30px;
-	color: #536471;
+	color: var(--muted);
 }
 
 .watermark {
@@ -227,7 +259,7 @@ body {
 	bottom: 20px;
 	font-size: 32px;
 	font-weight: 700;
-	color: #444;
+	color: var(--watermark);
 }
 
 /* ---------- Emojis (Twemoji, mesmo set do X) ---------- */

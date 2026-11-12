@@ -38,13 +38,20 @@
       </select>
     </label>
     <label>Data <input id="datetime"></label>
+    <label>Tema
+      <select id="theme">
+        <option value="light">Claro</option>
+        <option value="dim">Escuro (Dim)</option>
+        <option value="dark">Escuro (Preto)</option>
+      </select>
+    </label>
     <label>Marca d'água <input id="watermark" value="@olucascorte"></label>
     <button id="download">Baixar PNG 1080×1080</button>
   </aside>
 
   <main class="preview-wrap">
     <div id="stage-holder">
-    <div id="stage">
+    <div id="stage" data-theme="light">
       <article class="tweet">
         <header>
           <img id="p-avatar" class="avatar" alt="">

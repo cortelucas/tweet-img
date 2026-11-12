@@ -55,6 +55,11 @@ bind("watermark", "p-watermark");
 bindImage("avatar", "p-avatar");
 bindImage("photo", "p-photo");
 
+/* ---------- Tema ---------- */
+$("theme").addEventListener("change", (e) => {
+  $("stage").dataset.theme = e.target.value;
+});
+
 /* ---------- Formato da foto ---------- */
 $("ratio").addEventListener("change", (e) => {
   photo.style.aspectRatio = e.target.value;
