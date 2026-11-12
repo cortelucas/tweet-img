@@ -160,16 +160,25 @@ document.addEventListener("paste", (e) => {
 
 /* ---------- Interações (some se estiver vazio) ---------- */
 const updateStats = () => {
+  const only = $("iconsOnly").checked;
   let any = false;
   STATS.forEach((id) => {
     const v = $(id).value.trim();
-    $(`p-${id}`).textContent = v;
-    $(`s-${id}`).hidden = !v;
-    if (v) any = true;
+    $(id).disabled = only;
+    $(`p-${id}`).textContent = only ? "" : v;
+    $(`s-${id}`).hidden = only ? false : !v;
+    if (only || v) any = true;
   });
   $("p-stats").hidden = !any;
   fitCard();
 };
+
+$("iconsOnly").checked = !!state.iconsOnly;
+$("iconsOnly").addEventListener("change", () => {
+  state.iconsOnly = $("iconsOnly").checked;
+  save();
+  updateStats();
+});
 STATS.forEach((id) => $(id).addEventListener("input", updateStats));
 updateStats();
 
