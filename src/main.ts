@@ -9,6 +9,7 @@ import { downloadPng } from "./infra/export";
 import { $ } from "./ui/dom";
 import { fitCard, fitStage } from "./ui/fit";
 import { bindText } from "./ui/form";
+import { bindImport } from "./ui/import";
 import { persistFields, restoreFields } from "./ui/persistence";
 import { bindSettings } from "./ui/settings";
 import { bindStats } from "./ui/stats";
@@ -29,10 +30,11 @@ bindText("text", "p-text");
 bindText("datetime", "p-datetime");
 bindText("watermark", "p-watermark");
 
-bindImage("avatar", "p-avatar");
-const handlePhoto = bindImage("photo", "p-photo");
-bindPaste(handlePhoto);
+const avatar = bindImage("avatar", "p-avatar");
+const photo = bindImage("photo", "p-photo");
+bindPaste(photo.load);
 blockStrayDrops();
+bindImport({ avatar, photo });
 
 bindSettings();
 bindStats(state, () => saveState(state));

@@ -1,16 +1,24 @@
 import type { ImageId } from "../core/types";
 import { readAsDataUrl, shrink } from "../infra/image";
-import { loadImage, saveImage } from "../infra/storage";
+import { loadImage, removeImage, saveImage } from "../infra/storage";
 import { $ } from "./dom";
+import { fitCard } from "./fit";
 
 export type FileHandler = (file: File | null | undefined) => Promise<void>;
 
-export const bindImage = (inputId: ImageId, targetId: string): FileHandler => {
+export interface ImageControl {
+  load: FileHandler;
+  clear: () => void;
+}
+
+export const bindImage = (inputId: ImageId, targetId: string): ImageControl => {
   const input = $<HTMLInputElement>(inputId);
   const label = input.closest<HTMLElement>(".upload");
   const thumb = label?.querySelector<HTMLImageElement>(".thumb");
   const text = label?.querySelector<HTMLElement>(".upload-text");
   if (!label || !thumb || !text) throw new Error(`#${inputId} precisa estar dentro de .upload`);
+
+  const defaultText = text.textContent ?? "";
 
   const apply = (data: string, name: string): void => {
     $<HTMLImageElement>(targetId).src = data;
@@ -18,6 +26,17 @@ export const bindImage = (inputId: ImageId, targetId: string): FileHandler => {
     thumb.hidden = false;
     text.textContent = name;
     label.classList.add("has-file");
+  };
+
+  const clear = (): void => {
+    $<HTMLImageElement>(targetId).removeAttribute("src");
+    thumb.removeAttribute("src");
+    thumb.hidden = true;
+    text.textContent = defaultText;
+    label.classList.remove("has-file");
+    input.value = "";
+    removeImage(inputId);
+    fitCard();
   };
 
   const saved = loadImage(inputId);
@@ -51,7 +70,7 @@ export const bindImage = (inputId: ImageId, targetId: string): FileHandler => {
   }
   label.addEventListener("drop", (e) => void handleFile((e as DragEvent).dataTransfer?.files[0]));
 
-  return handleFile;
+  return { load: handleFile, clear };
 };
 
 /** Ctrl+V com imagem na área de transferência. */

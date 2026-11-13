@@ -9,6 +9,14 @@
 <body>
   <aside class="panel">
     <h2>Dados</h2>
+    <div class="field">
+      <span class="field-title">Importar de um link do X</span>
+      <div class="import-row">
+        <input id="import-url" type="url" placeholder="https://x.com/usuario/status/123" autocomplete="off">
+        <button id="import-btn" type="button">Importar</button>
+      </div>
+      <p id="import-status" class="status" role="status" hidden></p>
+    </div>
     <label>Nome <input id="name" value="Lucas S. Corte"></label>
     <label>@usuário <input id="handle" value="olucascorte"></label>
     <div class="field">

@@ -38,6 +38,14 @@ export const saveImage = (id: ImageId, image: StoredImage): boolean => {
   }
 };
 
+export const removeImage = (id: ImageId): void => {
+  try {
+    localStorage.removeItem(imageKey(id));
+  } catch {
+    // sem acesso ao storage: nada a remover
+  }
+};
+
 export const clearAll = (): void => {
   Object.keys(localStorage)
     .filter((key) => key.startsWith(KEY))

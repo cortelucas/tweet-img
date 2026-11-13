@@ -1,54 +1,33 @@
-// @vitest-environment jsdom
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { clearAll, loadImage, loadState, saveImage, saveState } from "./storage";
+import { describe, expect, it, vi } from "vitest";
+import { fetchImageFile } from "./image";
 
-beforeEach(() => localStorage.clear());
-afterEach(() => vi.restoreAllMocks());
+describe("fetchImageFile", () => {
+  it("devolve um File com o tipo e o nome informados", async () => {
+    const body = new Blob(["abc"], { type: "image/png" });
+    const fetchFn = vi.fn().mockResolvedValue(new Response(body, { status: 200 }));
 
-describe("state", () => {
-  it("devolve objeto vazio quando não há nada salvo", () => {
-    expect(loadState()).toEqual({});
+    const file = await fetchImageFile("https://pbs.twimg.com/a.png", "foto.png", fetchFn);
+
+    expect(fetchFn).toHaveBeenCalledWith("https://pbs.twimg.com/a.png");
+    expect(file).toBeInstanceOf(File);
+    expect(file.name).toBe("foto.png");
+    expect(file.type).toBe("image/png");
+    expect(file.size).toBe(3);
   });
 
-  it("salva e recupera o estado", () => {
-    saveState({ name: "Lucas", theme: "dim", iconsOnly: true });
-    expect(loadState()).toEqual({ name: "Lucas", theme: "dim", iconsOnly: true });
+  it("assume JPEG quando o servidor não informa o tipo", async () => {
+    const fetchFn = vi.fn().mockResolvedValue(new Response(new Blob(["x"]), { status: 200 }));
+    const file = await fetchImageFile("https://x/img", "foto", fetchFn);
+    expect(file.type).toBe("image/jpeg");
   });
 
-  it("devolve objeto vazio quando o JSON salvo está corrompido", () => {
-    localStorage.setItem("tweet-img:v1", "{quebrado");
-    expect(loadState()).toEqual({});
-  });
-});
-
-describe("images", () => {
-  it("devolve null quando não há imagem salva", () => {
-    expect(loadImage("avatar")).toBeNull();
+  it("falha quando a resposta não é ok", async () => {
+    const fetchFn = vi.fn().mockResolvedValue(new Response("", { status: 403 }));
+    await expect(fetchImageFile("https://x/img", "foto", fetchFn)).rejects.toThrow("403");
   });
 
-  it("salva e recupera a imagem", () => {
-    expect(saveImage("photo", { data: "data:image/webp;base64,AAA", name: "foto.png" })).toBe(true);
-    expect(loadImage("photo")).toEqual({ data: "data:image/webp;base64,AAA", name: "foto.png" });
-  });
-
-  it("devolve false quando o localStorage estoura a cota", () => {
-    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
-      throw new DOMException("cheio", "QuotaExceededError");
-    });
-    expect(saveImage("photo", { data: "x", name: "a.png" })).toBe(false);
-  });
-});
-
-describe("clearAll", () => {
-  it("remove só as chaves do app", () => {
-    saveState({ name: "Lucas" });
-    saveImage("avatar", { data: "x", name: "a.png" });
-    localStorage.setItem("outra-chave", "fica");
-
-    clearAll();
-
-    expect(loadState()).toEqual({});
-    expect(loadImage("avatar")).toBeNull();
-    expect(localStorage.getItem("outra-chave")).toBe("fica");
+  it("propaga erro de rede (por exemplo, CORS)", async () => {
+    const fetchFn = vi.fn().mockRejectedValue(new TypeError("Failed to fetch"));
+    await expect(fetchImageFile("https://x/img", "foto", fetchFn)).rejects.toThrow("Failed to fetch");
   });
 });
