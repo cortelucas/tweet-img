@@ -9,6 +9,8 @@ export const downloadPng = async (
     height: 1080,
     pixelRatio: 1,
     cacheBust: true,
+    filter: (element) =>
+      !(element instanceof HTMLImageElement) || Boolean(element.getAttribute('src')),
     style: { transform: 'none' }, // exporta sempre em 1080x1080 reais
   });
   const a = document.createElement('a');
