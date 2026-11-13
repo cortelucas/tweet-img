@@ -1,0 +1,60 @@
+<aside class="panel">
+  <h2>Dados</h2>
+  <div class="field">
+    <span class="field-title">Importar de um link do X</span>
+    <div class="import-row">
+      <input id="import-url" type="url" placeholder="https://x.com/usuario/status/123" autocomplete="off">
+      <button id="import-btn" type="button">Importar</button>
+    </div>
+    <p id="import-status" class="status" role="status" hidden></p>
+  </div>
+  <label>Nome <input id="name" value="Lucas S. Corte"></label>
+  <label>@usuário <input id="handle" value="olucascorte"></label>
+  <div class="field">
+    <span class="field-title">Avatar</span>
+    <label class="upload">
+      <input id="avatar" type="file" accept="image/*" hidden>
+      <img class="thumb" alt="" hidden>
+      <span class="upload-text">Clique ou arraste a imagem</span>
+    </label>
+  </div>
+  <label>Texto <textarea id="text" rows="8"></textarea></label>
+  <div class="field">
+    <span class="field-title">Foto do post</span>
+    <label class="upload">
+      <input id="photo" type="file" accept="image/*" hidden>
+      <img class="thumb" alt="" hidden>
+      <span class="upload-text">Clique, arraste ou cole (Ctrl+V)</span>
+    </label>
+  </div>
+  <label>Formato da foto
+    <select id="ratio">
+      <option value="1 / 1">Quadrada</option>
+      <option value="4 / 3">4:3</option>
+      <option value="16 / 9">16:9</option>
+    </select>
+  </label>
+  <label>Data <input id="datetime"></label>
+  <div class="field">
+    <span class="field-title">Interações (opcional)</span>
+    <div class="grid-2">
+      <input id="replies" placeholder="Respostas">
+      <input id="reposts" placeholder="Reposts">
+      <input id="likes" placeholder="Curtidas">
+      <input id="views" placeholder="Visualizações">
+    </div>
+    <label class="check">
+      <input id="iconsOnly" type="checkbox"> Mostrar só os ícones (sem números)
+    </label>
+  </div>
+  <label>Tema
+    <select id="theme">
+      <option value="light">Claro</option>
+      <option value="dim">Escuro (Dim)</option>
+      <option value="dark">Escuro (Preto)</option>
+    </select>
+  </label>
+  <label>Marca d'água <input id="watermark" value="@olucascorte"></label>
+  <button id="download" type="button">Baixar PNG 1080×1080</button>
+  <button id="reset" class="secondary" type="button">Limpar dados salvos</button>
+</aside>
