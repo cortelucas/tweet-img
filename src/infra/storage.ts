@@ -47,7 +47,7 @@ export const removeImage = (id: ImageId): void => {
 };
 
 export const clearAll = (): void => {
-  Object.keys(localStorage)
-    .filter((key) => key.startsWith(KEY))
-    .forEach((key) => localStorage.removeItem(key));
+  for (const key of Object.keys(localStorage)) {
+    if (key.startsWith(KEY)) localStorage.removeItem(key);
+  }
 };

@@ -43,7 +43,7 @@ export const bindImage = (inputId: ImageId, targetId: string): ImageControl => {
   if (saved) apply(saved.data, saved.name);
 
   const handleFile: FileHandler = async (file) => {
-    if (!file || !file.type.startsWith("image/")) return;
+    if (!file?.type.startsWith("image/")) return;
     const data = await readAsDataUrl(file);
     apply(data, file.name);
     const small = await shrink(data);
