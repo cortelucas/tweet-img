@@ -6,6 +6,7 @@ import './styles/style.css';
 import { formatDate } from './core/date';
 import { downloadPng } from './infra/export';
 import { clearAll, loadState, saveState } from './infra/storage';
+import { mountAppComponents } from './ui/components';
 import { $ } from './ui/dom';
 import { fitCard, fitStage } from './ui/fit';
 import { bindText } from './ui/form';
@@ -14,6 +15,8 @@ import { persistFields, restoreFields } from './ui/persistence';
 import { bindSettings } from './ui/settings';
 import { bindStats } from './ui/stats';
 import { bindImage, bindPaste, blockStrayDrops } from './ui/uploads';
+
+mountAppComponents();
 
 const state = loadState();
 
