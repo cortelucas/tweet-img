@@ -10,6 +10,7 @@ Você informa texto e foto, e o app devolve um PNG pronto para postar.
 ## Funcionalidades
 
 - Card no estilo do X com nome, @usuário, avatar, texto, foto e data
+- **Importação por link:** cole o link de um post público do X e o app preenche nome, texto, data, avatar, foto e contadores
 - Saída sempre em **1080×1080 px**, independente do tamanho da tela
 - Preview centralizado e ajustado automaticamente à janela
 - Card que se reduz sozinho quando o texto é longo; palavras muito longas são quebradas
@@ -25,9 +26,20 @@ Você informa texto e foto, e o app devolve um PNG pronto para postar.
 ## Como usar
 
 1. Abra a [demo](https://cortelucas.github.io/tweet-img/).
-2. Preencha nome, @usuário, texto e, se quiser, avatar e foto.
-3. Escolha o tema e o formato da foto.
+2. Preencha nome, @usuário, texto e, se quiser, avatar e foto. Ou cole o link de um post em **Importar de um link do X** e clique em **Importar**.
+3. Ajuste o que quiser: tema, formato da foto, data e contadores.
 4. Clique em **Baixar PNG 1080×1080**.
+
+### Importar de um link do X
+
+Aceita links como `https://x.com/usuario/status/123` (também `twitter.com`, com `www.` ou `mobile.`, e com parâmetros como `?s=20`).
+Depois de importar, todos os campos continuam editáveis.
+
+Pontos de atenção:
+
+- A importação usa a API pública do [FxTwitter](https://github.com/FixTweet/FxTwitter), um serviço de terceiros e não oficial. Ele pode ter limite de requisições, mudar ou ficar fora do ar. Nesse caso, preencha os campos manualmente.
+- Só funciona com posts **públicos**. Posts privados ou apagados mostram uma mensagem de erro.
+- Use com posts seus ou dê o crédito ao autor original.
 
 ## Desenvolvimento
 
@@ -60,15 +72,19 @@ tweet-img/
 │   ├── core/                      # regras puras, sem DOM (testadas)
 │   │   ├── types.ts
 │   │   ├── date.ts
-│   │   └── stats.ts
-│   ├── infra/                     # localStorage, imagens, exportação PNG
+│   │   ├── stats.ts
+│   │   ├── tweet-url.ts           # extrai usuário e id do link
+│   │   └── tweet-data.ts          # converte a resposta do FxTwitter nos campos do card
+│   ├── infra/                     # localStorage, imagens, exportação PNG, API
 │   │   ├── storage.ts
 │   │   ├── image.ts
-│   │   └── export.ts
+│   │   ├── export.ts
+│   │   └── fxtwitter.ts           # cliente do FxTwitter
 │   ├── ui/                        # manipulação do DOM
 │   │   ├── dom.ts
 │   │   ├── fit.ts
 │   │   ├── form.ts
+│   │   ├── import.ts              # campo "Importar de um link do X"
 │   │   ├── persistence.ts
 │   │   ├── settings.ts
 │   │   ├── stats.ts
@@ -85,6 +101,7 @@ tweet-img/
 - [Vitest](https://vitest.dev/) + jsdom para os testes
 - [html-to-image](https://github.com/bubkoo/html-to-image) para exportar o PNG
 - [Twemoji](https://github.com/jdecked/twemoji) para os emojis
+- [FxTwitter](https://github.com/FixTweet/FxTwitter) (API pública) para importar posts por link
 - [Inter](https://fontsource.org/fonts/inter) via Fontsource
 
 ## Deploy
