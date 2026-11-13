@@ -52,13 +52,13 @@ npm install
 npm run dev
 ```
 
-| Comando | O que faz |
-|---|---|
-| `npm run dev` | Servidor de desenvolvimento |
-| `npm test` | Roda os testes (Vitest) |
-| `npm run test:watch` | Testes em modo watch |
-| `npm run build` | Checa os tipos e gera a pasta `dist` |
-| `npm run preview` | Serve o build localmente |
+| Comando              | O que faz                            |
+| -------------------- | ------------------------------------ |
+| `npm run dev`        | Servidor de desenvolvimento          |
+| `npm test`           | Roda os testes (Vitest)              |
+| `npm run test:watch` | Testes em modo watch                 |
+| `npm run build`      | Checa os tipos e gera a pasta `dist` |
+| `npm run preview`    | Serve o build localmente             |
 
 ## Estrutura
 

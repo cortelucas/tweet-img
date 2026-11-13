@@ -1,12 +1,12 @@
-import { $ } from "./dom";
-import { fitCard } from "./fit";
+import { $ } from './dom';
+import { fitCard } from './fit';
 
 /** Tema do card e formato (aspect ratio) da foto do post. */
 export const bindSettings = (): void => {
-  const theme = $<HTMLSelectElement>("theme");
-  const ratio = $<HTMLSelectElement>("ratio");
-  const stage = $("stage");
-  const photo = $("p-photo");
+  const theme = $<HTMLSelectElement>('theme');
+  const ratio = $<HTMLSelectElement>('ratio');
+  const stage = $('stage');
+  const photo = $('p-photo');
 
   const applyTheme = (): void => {
     stage.dataset.theme = theme.value;
@@ -16,8 +16,8 @@ export const bindSettings = (): void => {
     fitCard();
   };
 
-  theme.addEventListener("change", applyTheme);
-  ratio.addEventListener("change", applyRatio);
+  theme.addEventListener('change', applyTheme);
+  ratio.addEventListener('change', applyRatio);
   applyTheme();
   applyRatio();
 };

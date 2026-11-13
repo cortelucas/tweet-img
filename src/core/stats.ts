@@ -1,4 +1,4 @@
-import { STAT_IDS, type StatId } from "./types";
+import { STAT_IDS, type StatId } from './types';
 
 export interface StatItemView {
   visible: boolean;
@@ -17,8 +17,8 @@ export const buildStatsView = (values: Record<StatId, string>, iconsOnly: boolea
 
   for (const id of STAT_IDS) {
     const value = values[id].trim();
-    const itemVisible = iconsOnly || value !== "";
-    items[id] = { visible: itemVisible, text: iconsOnly ? "" : value };
+    const itemVisible = iconsOnly || value !== '';
+    items[id] = { visible: itemVisible, text: iconsOnly ? '' : value };
     if (itemVisible) visible = true;
   }
 

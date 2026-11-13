@@ -3,7 +3,14 @@ export interface TweetRef {
   id: string;
 }
 
-const HOSTS = new Set(["x.com", "twitter.com", "fxtwitter.com", "fixupx.com", "vxtwitter.com", "fixvx.com"]);
+const HOSTS = new Set([
+  'x.com',
+  'twitter.com',
+  'fxtwitter.com',
+  'fixupx.com',
+  'vxtwitter.com',
+  'fixvx.com',
+]);
 const USERNAME = /^\w{1,15}$/;
 const STATUS_ID = /^\d{1,25}$/;
 
@@ -19,16 +26,16 @@ export const parseTweetUrl = (input: string): TweetRef | null => {
     return null;
   }
 
-  const host = url.hostname.toLowerCase().replace(/^(www|mobile)\./, "");
+  const host = url.hostname.toLowerCase().replace(/^(www|mobile)\./, '');
   if (!HOSTS.has(host)) return null;
 
-  const parts = url.pathname.split("/").filter(Boolean);
+  const parts = url.pathname.split('/').filter(Boolean);
   // /i/web/status/ID  →  /i/status/ID
-  const segments = parts[0] === "i" && parts[1] === "web" ? ["i", ...parts.slice(2)] : parts;
+  const segments = parts[0] === 'i' && parts[1] === 'web' ? ['i', ...parts.slice(2)] : parts;
   const [username, kind, id] = segments;
 
   if (!username || !USERNAME.test(username)) return null;
-  if (kind !== "status" && kind !== "statuses") return null;
+  if (kind !== 'status' && kind !== 'statuses') return null;
   if (!id || !STATUS_ID.test(id)) return null;
 
   return { username, id };

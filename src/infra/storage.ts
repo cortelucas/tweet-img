@@ -1,11 +1,11 @@
-import type { AppState, ImageId, StoredImage } from "../core/types";
+import type { AppState, ImageId, StoredImage } from '../core/types';
 
-const KEY = "tweet-img:v1";
+const KEY = 'tweet-img:v1';
 const imageKey = (id: ImageId): string => `${KEY}:img:${id}`;
 
 export const loadState = (): AppState => {
   try {
-    return (JSON.parse(localStorage.getItem(KEY) ?? "{}") as AppState | null) ?? {};
+    return (JSON.parse(localStorage.getItem(KEY) ?? '{}') as AppState | null) ?? {};
   } catch {
     return {};
   }
@@ -15,7 +15,7 @@ export const saveState = (state: AppState): void => {
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
   } catch (err) {
-    console.warn("Não foi possível salvar:", err);
+    console.warn('Não foi possível salvar:', err);
   }
 };
 
