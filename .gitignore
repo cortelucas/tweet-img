@@ -3,3 +3,4 @@ node_modules/
 *.png
 !docs/*.png
 dist
+!docs/*.png
