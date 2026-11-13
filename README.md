@@ -12,10 +12,10 @@ Você informa texto e foto, e o app devolve um PNG pronto para postar.
 - Card no estilo do X com nome, @usuário, avatar, texto, foto e data
 - Saída sempre em **1080×1080 px**, independente do tamanho da tela
 - Preview centralizado e ajustado automaticamente à janela
-- Card que se reduz sozinho quando o texto é longo
+- Card que se reduz sozinho quando o texto é longo; palavras muito longas são quebradas
 - Foto do post em formato quadrado, 4:3 ou 16:9
 - Data de hoje preenchida automaticamente (editável)
-- Contadores de interação opcionais: respostas, reposts, curtidas e visualizações
+- Contadores de interação opcionais (respostas, reposts, curtidas e visualizações), com modo só ícones
 - Três temas: claro, escuro (Dim) e escuro (Preto)
 - Fonte Inter e emojis Twemoji (mesmo conjunto do X)
 - Upload de imagens por clique, **arrastar e soltar** ou **colar** (`Ctrl+V`)
@@ -24,41 +24,72 @@ Você informa texto e foto, e o app devolve um PNG pronto para postar.
 
 ## Como usar
 
-1. Abra a [demo](https://cortelucas.github.io/tweet-img/) ou o `index.html` no navegador.
+1. Abra a [demo](https://cortelucas.github.io/tweet-img/).
 2. Preencha nome, @usuário, texto e, se quiser, avatar e foto.
 3. Escolha o tema e o formato da foto.
 4. Clique em **Baixar PNG 1080×1080**.
 
-## Rodando localmente
+## Desenvolvimento
 
-Não há build nem dependências. Basta abrir o `index.html`:
+Requer Node.js 20.19+ ou 22.12+.
 
 ```bash
 git clone https://github.com/cortelucas/tweet-img.git
 cd tweet-img
-# abra index.html no navegador
+npm install
+npm run dev
 ```
+
+| Comando | O que faz |
+|---|---|
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm test` | Roda os testes (Vitest) |
+| `npm run test:watch` | Testes em modo watch |
+| `npm run build` | Checa os tipos e gera a pasta `dist` |
+| `npm run preview` | Serve o build localmente |
 
 ## Estrutura
 
 ```
 tweet-img/
+├── .github/workflows/deploy.yml   # CI e deploy
+├── docs/preview.png
+├── public/favicon.svg
+├── src/
+│   ├── main.ts                    # orquestra os módulos
+│   ├── core/                      # regras puras, sem DOM (testadas)
+│   │   ├── types.ts
+│   │   ├── date.ts
+│   │   └── stats.ts
+│   ├── infra/                     # localStorage, imagens, exportação PNG
+│   │   ├── storage.ts
+│   │   ├── image.ts
+│   │   └── export.ts
+│   ├── ui/                        # manipulação do DOM
+│   │   ├── dom.ts
+│   │   ├── fit.ts
+│   │   ├── form.ts
+│   │   ├── persistence.ts
+│   │   ├── settings.ts
+│   │   ├── stats.ts
+│   │   └── uploads.ts
+│   └── styles/style.css
 ├── index.html
-├── css/
-│   └── style.css
-├── js/
-│   └── app.js
-└── docs/
-    └── preview.png
+├── vite.config.ts
+└── package.json
 ```
 
 ## Stack
 
-- HTML, CSS e JavaScript puros
+- [Vite](https://vite.dev/) + TypeScript (modo estrito)
+- [Vitest](https://vitest.dev/) + jsdom para os testes
 - [html-to-image](https://github.com/bubkoo/html-to-image) para exportar o PNG
 - [Twemoji](https://github.com/jdecked/twemoji) para os emojis
-- [Inter](https://fonts.google.com/specimen/Inter) (Google Fonts)
-- GitHub Pages para hospedagem
+- [Inter](https://fontsource.org/fonts/inter) via Fontsource
+
+## Deploy
+
+A cada push na `main`, o GitHub Actions roda os testes, gera o build e publica a pasta `dist` no GitHub Pages. Pull requests rodam só os testes e o build, sem publicar.
 
 ## Commits
 
